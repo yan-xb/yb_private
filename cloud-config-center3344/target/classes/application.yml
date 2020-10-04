@@ -1,0 +1,30 @@
+server:
+  port: 3344
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+
+#配置中心相关配置
+
+spring:
+  application:
+    name: cloud-config-center
+  datasource:
+    # mysql驱动类
+    driver-class-name: org.gjt.mm.mysql.Driver
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  cloud:
+    config:
+      server:
+        git:                #git配置中心仓库读取分支
+          uri: git@git.lesaas.cn:khadgar/lion-app-manager.git   #git配置中心仓库对应地址
+          search-paths: #git配置中心仓库搜索目录
+            - lion-app-manager
+      label: master
+

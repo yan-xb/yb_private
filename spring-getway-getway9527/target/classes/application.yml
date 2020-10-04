@@ -1,0 +1,44 @@
+server:
+  port: 9527
+spring:
+  application:
+    name: cloud-getway
+  datasource:
+    # mysql驱动类
+    driver-class-name: org.gjt.mm.mysql.Driver
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  cloud:
+    gateway:
+      routes:
+        - id: payment_route     #路由id 不允许重复
+#          uri: http://localhost:8001  # （单机服务）匹配后提供服务的路由地址
+          uri: lb://CLOUD-PAYMENT-SERVICE  # （集群服务）
+          predicates:
+            - Path=/payment/get/**   #断言，路径相匹配的进行路由
+        - id: payment_route2
+#          uri: http://localhost:8001
+          uri: lb://CLOUD-PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/lb/**
+            - After=2020-08-27T16:40:01.263+08:00[Asia/Shanghai] #断言在此时间后才能访问
+#             请求中需要带cookie才能访问，
+#            cmd测试命令：curl http://localhost:9527/payment/lb --cookie "username:yb"
+#            - Cookie=username,yb
+            #请求中要带有X-Request-Id属性并且值为整数的正则表达式
+            #cmd测试命令：curl http://localhost:9527/payment/lb -H "X-Request-Id:2"
+#            - Header=X-Request-Id, \d+
+      discovery:
+        locator:
+          enabled: true  #开启从注册中心动态创建路由的功能，利用微服务名进行路由
+
+eureka:
+  instance:
+    hostname: cloud-getway-service
+  client:
+    service-url:
+      register-with-eureka: true
+      fetch-registry: true
+      defaultZone: http://eureka7001.com:7001/eureka

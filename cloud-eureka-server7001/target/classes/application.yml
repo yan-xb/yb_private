@@ -1,0 +1,29 @@
+server:
+  port: 7001
+
+eureka:
+  instance:
+#    单机版eureka服务端实例名称
+#    hostname: localhost
+#    集群eureka服务端实例名称
+    hostname: eureka7001.com
+  client:
+    # false表示不向注册中心注册自己
+    register-with-eureka: false
+    # false表示自己端就是注册中心,我的职责就是维护服务实例,并不需要检索服务
+    fetch-registry: false
+    # 设置与Eureka Server交互的地址查询服务和注册服务都需要依赖这个地址
+    service-url:
+#     1.单机注册
+      #efaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#     2.集群注册
+#      defaultZone: http://eureka7002.com:7002/eureka/
+#     3.单机注册 eureka 禁用自我保护机制
+#      efaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#  server:
+##  禁用eureka自我保护机制
+#    enable-self-preservation: false
+##  设置接受心跳时间间隔
+#    eviction-interval-timer-in-ms: 2000
+      #     1.单机注册 学习Hystrix
+      efaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

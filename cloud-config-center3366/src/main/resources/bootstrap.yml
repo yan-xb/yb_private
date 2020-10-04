@@ -1,0 +1,31 @@
+
+#bootstrap.yml（系统优先级） 与 application.yml（用户优先级）相比优先级更高server:
+server:
+  port: 3355
+
+eureka:
+  client:
+    service-url:
+      defaultZone: localhost://eureka7001.com/eureka
+spring:
+  application:
+    name: config-client3355
+  cloud:
+    #    config客户端配置中心相关配置
+    config:
+      lable: master #配置分支
+      name: config #配置文件名称
+      profile: dev #读取后缀名
+      #上述三个配置综合，就会读取master分支上的config-dev.yml文件
+      uri: http://localhost:3344 #配置中心地址
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+#暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

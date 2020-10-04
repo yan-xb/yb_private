@@ -1,0 +1,40 @@
+server:
+  port: 8802
+spring:
+  application:
+    name: cloud-stream-consumer
+  datasource:
+    # mysql驱动类
+    driver-class-name: org.gjt.mm.mysql.Driver
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  cloud:
+    stream:
+      binders: #配置要绑定的rabbitmq的服务信息
+        defaultRabbit: #表示定义的名称，用于binding整合
+          type: rabbit #消息组件类型
+          environment:  #设置rabbit相关配置的环境信息
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings:  #服务的整合处理
+        input: #这个名字是一个通道的名称
+          destination: studyExchange #表示要使用的exchange名称定义
+          content-type: application/json #设置消息类型，本次为json,文本设置为：‘text/plain’
+          binder: defaultRabbit #设置要绑定的消息服务的具体设置
+          group: groupa
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    lease-expiration-duration-in-seconds: 5 #设置超时时间（默认90s）
+    lease-renewal-interval-in-seconds: 2 #设置心跳的时间间隔（默认30s）
+    instance-id: receive-8802.com #在消息列表中显示的主机名称
+    prefer-ip-address: true #访问路径变成IP地址
